@@ -3,8 +3,28 @@ requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "gemfury-installer"
+name = "furypie"
 version = "0.1"
+description = "Install private python packages from gemfury"
+dependencies = ['ende', 'argpi']
+keywords = ["d33pster", "gemfury", "fury", "furypie", "pyfury"]
+requires-python = ">=3.12"
+classifiers = [
+    "Programming Language :: Python :: 3.12",
+    "Operating System :: OS Independent",
+    "License :: OSI Approved :: MIT License",
+]
+readme ={ file="README.md", content-type = "text/markdown" }
+license = { file = "LICENSE" }
+maintainers = [
+    {name = "Soumyo Deep Gupta", email = "deep.main.ac@gmail.com"}
+]
+authors = [
+    {name = "Soumyo Deep Gupta", email = "deep.main.ac@gmail.com"}
+]
+
+[project.scripts]
+furypie = "furypie:helper.main"
 
 [project.urls]
 GitHub = "https://github.com/d33pster/gemfury-installer"
