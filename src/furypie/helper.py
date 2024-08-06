@@ -7,9 +7,10 @@ from argpi import ArgumentDescription, Arguments, FetchType
 import sys
 
 class Installer:
-    def __init__(self, package: str):
+    def __init__(self, package: str = "", packages_: list[str] = []):
         self.package = package
         self.__runner = system
+        self.packages = packages_
 
         # maintain ~/.gemfury_auth
         if not exists(join(expanduser('~'), '.gemfury')):
@@ -54,6 +55,18 @@ class Installer:
     def run(self):
         # print(f"pip install {self.package} --index-url https://$AUTH@repo.furi.io/$USER_/")
         return self.__runner(f"pip install {self.package} --extra-index-url https://$AUTH@pypi.fury.io/$USER_/")
+    
+    @property
+    def run_multiple(self):
+        for file in self.packages:
+            with open(file, 'r+') as packagefile:
+                packages = packagefile.readlines()
+                
+            requirement_string = packages[0].replace('\n', '')
+            for x in packages[1:]:
+                requirement_string += " " + x.replace('\n', '')
+            
+            self.__runner(f"pip install {requirement_string} --extra-index-url https://$AUTH@pypi.fury.io/$USER_/")
 
 def main():
     arguments = Arguments().__capture__()
@@ -61,12 +74,24 @@ def main():
         "--install",
         ArgumentDescription().shorthand('-i')
     )
+    arguments.__add__(
+        "--requirements",
+        ArgumentDescription().shorthand("-r")
+    )
 
     arguments.__analyse__()
 
     if arguments.__there__("--install"):
-        installer = Installer(arguments.__fetch__("--install", FetchType.SINGULAR))
-        installer.run
+        if arguments.__there__("--requirements"):
+            installer = Installer(packages_=arguments.__fetch__("--requirements", FetchType.TILL_LAST))
+            installer.run_multiple
+        else:
+            installer = Installer(package=arguments.__fetch__("--install", FetchType.SINGULAR))
+            installer.run
+        
+        sys.exit(0)
     else:
         print("Argument Error!")
         print("   Syntax: furypie --install/-i <package-name>")
+        print("   for multiple from a file:")
+        print("   Syntax: furypie --install -r <index-file>")

@@ -19,6 +19,14 @@ furypie --install <package-name>
 # or furypie -i <package-name>
 ```
 
+## Install from requirements.txt
+
+```bash
+furypie --install -r <requirements.txt>
+```
+
+> This options help you install normal pip packages along with private ones from gemfury.
+
 ### `Important Notes to consider.`
 
 1. First time setup will ask for your deploy token generated from gemfury website and your gemfury username.

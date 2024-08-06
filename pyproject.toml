@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "furypie"
-version = "0.1"
+version = "0.2"
 description = "Install private python packages from gemfury"
 dependencies = ['ende', 'argpi']
 keywords = ["d33pster", "gemfury", "fury", "furypie", "pyfury"]
